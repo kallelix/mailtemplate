@@ -84,7 +84,10 @@ In case there is no prepared email-api.php, you can do it manual.<br>
 All entries are marked with a start and ending indicator like "## CN-start" and "## CN-end"
 
 ## Remarks
-Please let me know how to further improve.....
+Please let me know how to further improve.....<br>
+I have made a pull request for the Mantis team to add this funcionality into Mantis itself.<br>
+Let's hope it is approved.<br>
+
  
 Have a blast!
 
