@@ -1124,9 +1124,10 @@ function email_bugnote_add( $p_bugnote_id, $p_files = array(), $p_exclude_user_i
 ## CN-start
 ## setting required in config_inc.php :
 ## $g_use_mailtemplate = ON;
+## optional in config_inc.php: $g_mailtemplate_projects = array( <project_id>, ... );
 ## here we also check if the mail template exists
 	$templating = OFF;
-	if ( ON == config_get( 'use_mailtemplate' ) )  {
+	if ( ON == config_get( 'use_mailtemplate' ) && mailtemplate_project_allowed( $t_project_id ) )  {
 		$template_definition = config_get( 'note_mailtemplate' );
 		if (file_exists($template_definition)) {
 			$templating = ON;
@@ -1515,11 +1516,14 @@ function email_send( EmailData $p_email_data ) {
 	}
 
 	$t_mail->isHTML( false );              # set email format to plain text
-## CN
-	if ( ON == config_get( 'use_mailtemplate' ) )  {
+## CN-start
+## isHTML is gated on actual body content so it works with per-project templating
+## ($g_mailtemplate_projects). Only mails whose body is HTML get the HTML flag.
+	if ( ON == config_get( 'use_mailtemplate' )
+		&& ( stripos( $t_message, '<html' ) !== false || stripos( $t_message, '<!doctype' ) !== false ) )  {
 		$t_mail->isHTML( true );
-	} 
-## CN
+	}
+## CN-end
 
 	$t_mail->WordWrap = 80;              # set word wrap to 80 characters
 	$t_mail->CharSet = $t_email_data->metadata['charset'];
@@ -1841,9 +1845,11 @@ function email_bug_info_to_one_user( array $p_visible_bug_data, $p_message_id, $
 ## test CN to enable template for sending email
 ## setting required on config_inc.php :
 ## $g_use_mailtemplate = ON;
+## optional in config_inc.php: $g_mailtemplate_projects = array( <project_id>, ... );
 ## here we also check if the mail template exists
+	$t_project_id = bug_get_field( $p_visible_bug_data['email_bug'], 'project_id' );
 	$templating = OFF;
-	if ( ON == config_get( 'use_mailtemplate' ) )  {
+	if ( ON == config_get( 'use_mailtemplate' ) && mailtemplate_project_allowed( $t_project_id ) )  {
 		$template_definition = config_get( 'bug_mailtemplate' );
 		if (file_exists($template_definition)) {
 			$templating = ON;

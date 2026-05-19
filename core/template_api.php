@@ -1,5 +1,19 @@
 <?php
 
+## Returns true if mail-templating should be active for the given project id.
+## Configure via $g_mailtemplate_projects in config_inc.php:
+##   - not set / empty array : templating active for ALL projects (default, backwards compatible)
+##   - array of project ids   : templating active ONLY for the listed projects (e.g. array( 98 ))
+if ( !function_exists( 'mailtemplate_project_allowed' ) ) {
+	function mailtemplate_project_allowed( $p_project_id ) {
+		$t_allowed = config_get( 'mailtemplate_projects', array() );
+		if ( !is_array( $t_allowed ) || empty( $t_allowed ) ) {
+			return true;
+		}
+		return in_array( (int)$p_project_id, array_map( 'intval', $t_allowed ), true );
+	}
+}
+
 function email_template_bug_message( $issue_data,$top_line ) {
 
 	// we move all data into an array called $variables
