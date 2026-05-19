@@ -18,11 +18,11 @@ Available fields to this template:
 	[email_description] => 			description
 	[email_additional_information] => 	info
 	[email_steps_to_reproduce] => 		steps
-	Custom fields				cfdata		
+	Custom fields				cfdata
 	Notes					notedata	As table
 	Relations				reldata		As table
-	History					hisdata		
-	History (last entries)			lasthisdata	
+	History					hisdata
+	History (last entries)			lasthisdata
 
 	## following 2 fields are available for testing purposes
 	Referer page				reference
@@ -35,161 +35,271 @@ Available fields to this template:
 	modification of contents takes place within core/template_api.php, function email_template_bug_message
 -->
 <!DOCTYPE html>
-<html>
+<html lang="de">
 
 <head>
-    <title>Issue Details</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neues Issue</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #93B874;
-            padding: 20px;
             margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+            font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+            color: #19292e;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrapper {
+            width: 100%;
+            background-color: #f3f3f3;
+            padding: 24px 12px;
+            box-sizing: border-box;
         }
 
         .container {
-            max-width: 600px;
-            margin: 20px auto;
+            max-width: 640px;
+            margin: 0 auto;
             background-color: #FFFFFF;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
         }
 
-        h3 {
-            color: #333;
-            background: #f2f2f2;
-            padding: 10px;
+        .header {
+            background-color: #003265;
+            padding: 26px 28px 24px 28px;
+            border-bottom: 4px solid #b9d152;
+        }
+
+        .header .top-line {
+            color: #b9d152;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin: 0 0 8px 0;
+        }
+
+        .header .summary {
+            color: #FFFFFF;
+            font-size: 20px;
+            line-height: 1.35;
+            font-weight: 600;
             margin: 0;
-            text-align: center;
-            border-radius: 5px;
         }
 
-        table {
+        .badge {
+            display: inline-block;
+            background-color: #b9d152;
+            color: #19292e;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 8px 28px 8px 28px;
+        }
+
+        table.details {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 16px;
         }
 
-        th,
-        td {
-            border: 1px solid black;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #006066;
-            color: white;
+        table.details th,
+        table.details td {
+            padding: 11px 14px;
             text-align: left;
+            vertical-align: top;
+            font-size: 14px;
+            line-height: 1.5;
+            border-bottom: 1px solid #ebebeb;
         }
 
-        td {
+        table.details th {
+            width: 36%;
+            color: #003265;
+            font-weight: 600;
+            background-color: #f3f3f3;
+        }
+
+        table.details td {
+            color: #19292e;
             background-color: #FFFFFF;
+            word-break: break-word;
+        }
+
+        table.details tr:last-child th,
+        table.details tr:last-child td {
+            border-bottom: none;
         }
 
         a {
-            color: #006066;
+            color: #003265;
             text-decoration: none;
+            font-weight: 600;
         }
 
         a:hover {
             text-decoration: underline;
         }
 
+        .cta-row {
+            padding: 24px 28px 28px 28px;
+            text-align: center;
+        }
+
+        .cta {
+            display: inline-block;
+            background-color: #b9d152;
+            color: #19292e !important;
+            padding: 13px 26px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 18px 24px 8px 24px;
+            color: #636363;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
         pre {
+            font-family: inherit;
             white-space: pre-wrap;
+            word-break: break-word;
             margin: 0;
+        }
+
+        @media (max-width: 480px) {
+
+            table.details th,
+            table.details td {
+                display: block;
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+
+            table.details th {
+                border-bottom: none;
+                padding-bottom: 4px;
+            }
+
+            table.details td {
+                padding-top: 4px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h3>{{ summary }}</h3>
-        <table>
-            <tr>
-                <th>Issue-id</th>
-                <td><a href={{ url }}>{{ bug_id }}</a></td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ description }}</td>
-            </tr>
-            <tr>
-                <th>Project/Category</th>
-                <td>{{ project }}: {{ category }}</td>
-            </tr>
-			<tr>
-                <th>Reporter</th>
-                <td>{{ reporter }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ status }}</td>
-            </tr>
-            <tr>
-                <th>Submitted</th>
-                <td>{{ submitted }}</td>
-            </tr>
-            <tr>
-                <th>Priority</th>
-                <td>{{ priority }}</td>
-            </tr>
-            <tr>
-                <th>Severity</th>
-                <td>{{ severity }}</td>
-            </tr>
-            <tr>
-                <th>Last Modified</th>
-                <td>{{ modified }}</td>
-            </tr>
-            <tr>
-                <th>Reproducibility</th>
-                <td>{{ repro }}</td>
-            </tr>
-            <tr>
-                <th>Steps to reproduce</th>
-                <td>{{ steps }}</td>
-            </tr>
-            <tr>
-                <th>Additional Information</th>
-                <td>{{ info }}</td>
-            </tr>
-            <tr>
-                <th>Due-Date</th>
-                <td>{{ due_date }}</td>
-            </tr>
-            <tr>
-                <th>Tags</th>
-                <td>{{ tags }}</td>
-            </tr>
-            <tr>
-                <th>Custom Fields</th>
-                <td>{{ cfdata }}</td>
-            </tr>
-            <tr>
-                <th>Relations</th>
-                <td>{{ reldata }}</td>
-            </tr>
-            <tr>
-                <th>Notes</th>
-                <td>{{ notedata }}</td>
-            </tr>
-            <tr>
-                <th>Last History</th>
-                <td>{{ lasthisdata }}</td>
-            </tr>
-            <!-- skip for now, feel free to use
-            <tr><td><b>All History</b></td><td>{{ hisdata }}</td></tr>
-            <tr><td><b>Referer</b></td><td> {{ reference }}</td></tr>
-            <tr><td><b>Available data</b></td><td><pre> {{ mail_data }}</pre></td></tr>
-            -->
-            <tr>
-                <th>On The Web</th>
-                <td><a href="{{ url }}">View all details inside the Issue Tracker</a></td>
-            </tr>
-        </table>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <span class="badge">Neu</span>
+                <p class="top-line">{{ top_line }}</p>
+                <h1 class="summary">{{ summary }}</h1>
+            </div>
+            <div class="content">
+                <table class="details" role="presentation">
+                    <tr>
+                        <th>Issue-ID</th>
+                        <td><a href="{{ url }}">#{{ bug_id }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>Beschreibung</th>
+                        <td>{{ description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Projekt / Kategorie</th>
+                        <td>{{ project }}: {{ category }}</td>
+                    </tr>
+                    <tr>
+                        <th>Reporter</th>
+                        <td>{{ reporter }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>{{ status }}</td>
+                    </tr>
+                    <tr>
+                        <th>Erstellt am</th>
+                        <td>{{ submitted }}</td>
+                    </tr>
+                    <tr>
+                        <th>Priorität</th>
+                        <td>{{ priority }}</td>
+                    </tr>
+                    <tr>
+                        <th>Schweregrad</th>
+                        <td>{{ severity }}</td>
+                    </tr>
+                    <tr>
+                        <th>Zuletzt geändert</th>
+                        <td>{{ modified }}</td>
+                    </tr>
+                    <tr>
+                        <th>Reproduzierbarkeit</th>
+                        <td>{{ repro }}</td>
+                    </tr>
+                    <tr>
+                        <th>Schritte zur Reproduktion</th>
+                        <td>{{ steps }}</td>
+                    </tr>
+                    <tr>
+                        <th>Zusätzliche Informationen</th>
+                        <td>{{ info }}</td>
+                    </tr>
+                    <tr>
+                        <th>Fälligkeitsdatum</th>
+                        <td>{{ due_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tags</th>
+                        <td>{{ tags }}</td>
+                    </tr>
+                    <tr>
+                        <th>Custom Fields</th>
+                        <td>{{ cfdata }}</td>
+                    </tr>
+                    <tr>
+                        <th>Relations</th>
+                        <td>{{ reldata }}</td>
+                    </tr>
+                    <tr>
+                        <th>Notes</th>
+                        <td>{{ notedata }}</td>
+                    </tr>
+                    <tr>
+                        <th>Letzte Änderungen</th>
+                        <td>{{ lasthisdata }}</td>
+                    </tr>
+                    <!-- skip for now, feel free to use
+                    <tr><th>All History</th><td>{{ hisdata }}</td></tr>
+                    <tr><th>Referer</th><td>{{ reference }}</td></tr>
+                    <tr><th>Available data</th><td><pre>{{ mail_data }}</pre></td></tr>
+                    -->
+                </table>
+            </div>
+            <div class="cta-row">
+                <a class="cta" href="{{ url }}">Issue im Tracker öffnen</a>
+            </div>
+            <div class="footer">
+                Diese Nachricht wurde automatisch vom Mantis Bug Tracker erzeugt.
+            </div>
+        </div>
     </div>
 </body>
 
 </html>
-

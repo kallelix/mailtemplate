@@ -2,134 +2,260 @@
 Available fields to this template:
 	$variables['top_line']	= Header of the text
 	$variables['note_id']	= Note-id
-	$variables['reporter'	= Name of reporter
+	$variables['reporter']	= Name of reporter
 	$variables['access']	= Access_level
 	$variables['modified']	= Last_modified
 	$variables['private']	= Private
 	$variables['timetrack'] = Time_tracking
 	$variables['url']		= Link to bugnote
 	$variables['note']		= The note itself
-	$variables['bug_id']		= Bug_id;
+	$variables['bug_id']	= Bug_id;
 	$variables['bug_url']	= Link to bug
 	$variables['summary']	= Summary text og bug
 	$variables['category']	= Name of category
 	$variables['project']	= Name of project
-	
+
 	## how to use the fields
 	all elements ( only those you need of course) need to be referenced inbetween "{{" and "}}"
 -->
 <!DOCTYPE html>
-<html>
+<html lang="de">
 
 <head>
-    <title>Note Details</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notiz Details</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #93B874;
-            padding: 20px;
             margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+            font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+            color: #19292e;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrapper {
+            width: 100%;
+            background-color: #f3f3f3;
+            padding: 24px 12px;
+            box-sizing: border-box;
         }
 
         .container {
-            max-width: 600px;
-            margin: 20px auto;
+            max-width: 640px;
+            margin: 0 auto;
             background-color: #FFFFFF;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
         }
 
-        h3 {
-            color: #333;
-            background: #f2f2f2;
-            padding: 10px;
+        .header {
+            background-color: #003265;
+            padding: 26px 28px 24px 28px;
+            border-bottom: 4px solid #b9d152;
+        }
+
+        .header .top-line {
+            color: #b9d152;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin: 0 0 8px 0;
+        }
+
+        .header .summary {
+            color: #FFFFFF;
+            font-size: 20px;
+            line-height: 1.35;
+            font-weight: 600;
             margin: 0;
-            text-align: center;
-            border-radius: 5px;
         }
 
-        table {
+        .content {
+            padding: 8px 28px 8px 28px;
+        }
+
+        .note-block {
+            margin-top: 20px;
+            background-color: #f3f3f3;
+            border-left: 4px solid #b9d152;
+            padding: 16px 18px;
+            border-radius: 4px;
+        }
+
+        .note-block .note-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #003265;
+            margin: 0 0 6px 0;
+        }
+
+        .note-block pre {
+            font-family: inherit;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0;
+            color: #19292e;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        table.details {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 16px;
         }
 
-        th,
-        td {
-            border: 1px solid black;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #006066;
-            color: white;
+        table.details th,
+        table.details td {
+            padding: 11px 14px;
             text-align: left;
+            vertical-align: top;
+            font-size: 14px;
+            line-height: 1.5;
+            border-bottom: 1px solid #ebebeb;
         }
 
-        td {
+        table.details th {
+            width: 36%;
+            color: #003265;
+            font-weight: 600;
+            background-color: #f3f3f3;
+        }
+
+        table.details td {
+            color: #19292e;
             background-color: #FFFFFF;
+            word-break: break-word;
+        }
+
+        table.details tr:last-child th,
+        table.details tr:last-child td {
+            border-bottom: none;
         }
 
         a {
-            color: #006066;
+            color: #003265;
             text-decoration: none;
+            font-weight: 600;
         }
 
         a:hover {
             text-decoration: underline;
         }
 
+        .cta-row {
+            padding: 24px 28px 28px 28px;
+            text-align: center;
+        }
+
+        .cta {
+            display: inline-block;
+            background-color: #b9d152;
+            color: #19292e !important;
+            padding: 13px 26px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 18px 24px 8px 24px;
+            color: #636363;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
         pre {
+            font-family: inherit;
             white-space: pre-wrap;
+            word-break: break-word;
             margin: 0;
+        }
+
+        @media (max-width: 480px) {
+
+            table.details th,
+            table.details td {
+                display: block;
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+
+            table.details th {
+                border-bottom: none;
+                padding-bottom: 4px;
+            }
+
+            table.details td {
+                padding-top: 4px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h3>{{ summary }}</h3>
-        <br>
-        <table>
-            <tr>
-                <th>Issue</th>
-                <td><a href={{ url }}>{{ bug_id }}</a></td>
-            </tr>
-            <tr>
-                <th>Project/Category</th>
-                <td>{{ project }}: {{ category }}</td>
-            </tr>
-            <tr>
-                <th>Author</th>
-                <td>{{ reporter }}</td>
-            </tr>
-            <tr>
-                <th>Note</th>
-                <td><pre>{{ note }}</pre></td>
-            </tr>
-            <tr>
-                <th>Note ID </th>
-                <td><a href={{ url }}>{{ note_id }}</a></td>
-            </tr>
-            <tr>
-                <th>Access level</th>
-                <td>{{ access }}</td>
-            </tr>
-            <tr>
-                <th>Last modified</th>
-                <td>{{ modified }}</td>
-            </tr>
-            <tr>
-                <th>Private</th>
-                <td>{{ private }}</td>
-            </tr>
-            <tr>
-                <th>Timetracking</th>
-                <td><pre>{{ timetrack }}</pre></td>
-            </tr>
-        </table>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <p class="top-line">{{ top_line }}</p>
+                <h1 class="summary">{{ summary }}</h1>
+            </div>
+            <div class="content">
+                <div class="note-block">
+                    <p class="note-label">Notiz</p>
+                    <pre>{{ note }}</pre>
+                </div>
+                <table class="details" role="presentation">
+                    <tr>
+                        <th>Issue</th>
+                        <td><a href="{{ url }}">#{{ bug_id }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>Projekt / Kategorie</th>
+                        <td>{{ project }}: {{ category }}</td>
+                    </tr>
+                    <tr>
+                        <th>Autor</th>
+                        <td>{{ reporter }}</td>
+                    </tr>
+                    <tr>
+                        <th>Notiz-ID</th>
+                        <td><a href="{{ url }}">#{{ note_id }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>Berechtigungslevel</th>
+                        <td>{{ access }}</td>
+                    </tr>
+                    <tr>
+                        <th>Zuletzt geändert</th>
+                        <td>{{ modified }}</td>
+                    </tr>
+                    <tr>
+                        <th>Privat</th>
+                        <td>{{ private }}</td>
+                    </tr>
+                    <tr>
+                        <th>Zeiterfassung</th>
+                        <td><pre>{{ timetrack }}</pre></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="cta-row">
+                <a class="cta" href="{{ url }}">Notiz im Tracker öffnen</a>
+            </div>
+            <div class="footer">
+                Diese Nachricht wurde automatisch vom Mantis Bug Tracker erzeugt.
+            </div>
+        </div>
     </div>
 </body>
 
 </html>
-
